@@ -1,0 +1,101 @@
+<html>
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .calculator {
+            max-width: 400px;
+            margin: auto;
+        }
+        .button {
+            height: 80px;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="calculator bg-blue-500 rounded-lg p-4">
+        <div id="display" class="bg-blue-200 rounded-t-lg p-4 mb-2 text-right text-4xl font-mono text-black">
+            0
+        </div>
+        <div class="grid grid-cols-4 gap-2">
+            <button class="button bg-blue-600 text-white text-2xl p-4 rounded" onclick="appendNumber('7')">7</button>
+            <button class="button bg-blue-600 text-white text-2xl p-4 rounded" onclick="appendNumber('8')">8</button>
+            <button class="button bg-blue-600 text-white text-2xl p-4 rounded" onclick="appendNumber('9')">9</button>
+            <button class="button bg-blue-600 text-white text-2xl p-4 rounded" onclick="chooseOperation('/')">/</button>
+            <button class="button bg-blue-600 text-white text-2xl p-4 rounded" onclick="appendNumber('4')">4</button>
+            <button class="button bg-blue-600 text-white text-2xl p-4 rounded" onclick="appendNumber('5')">5</button>
+            <button class="button bg-blue-600 text-white text-2xl p-4 rounded" onclick="appendNumber('6')">6</button>
+            <button class="button bg-blue-600 text-white text-2xl p-4 rounded" onclick="chooseOperation('*')">*</button>
+            <button class="button bg-blue-600 text-white text-2xl p-4 rounded" onclick="appendNumber('1')">1</button>
+            <button class="button bg-blue-600 text-white text-2xl p-4 rounded" onclick="appendNumber('2')">2</button>
+            <button class="button bg-blue-600 text-white text-2xl p-4 rounded" onclick="appendNumber('3')">3</button>
+            <button class="button bg-blue-600 text-white text-2xl p-4 rounded" onclick="chooseOperation('-')">-</button>
+            <button class="button bg-blue-600 text-white text-2xl p-4 rounded col-span-2" onclick="appendNumber('0')">0</button>
+            <button class="button bg-blue-600 text-white text-2xl p-4 rounded" onclick="chooseOperation('+')">+</button>
+            <button class="button bg-blue-600 text-white text-2xl p-4 rounded" onclick="compute()">=</button>
+            <button class="button bg-blue-600 text-white text-2xl p-4 rounded col-span-2" onclick="clearDisplay()">C</button>
+        </div>
+    </div>
+
+    <script>
+        let currentOperand = '';
+        let previousOperand = '';
+        let operation = undefined;
+
+        function clearDisplay() {
+            currentOperand = '';
+            previousOperand = '';
+            operation = undefined;
+            updateDisplay();
+        }
+
+        function appendNumber(number) {
+            if (number === '0' && currentOperand === '0') return;
+            currentOperand = currentOperand.toString() + number.toString();
+            updateDisplay();
+        }
+
+        function chooseOperation(op) {
+            if (currentOperand === '') return;
+            if (previousOperand !== '') {
+                compute();
+            }
+            operation = op;
+            previousOperand = currentOperand;
+            currentOperand = '';
+        }
+
+        function compute() {
+            let computation;
+            const prev = parseFloat(previousOperand);
+            const current = parseFloat(currentOperand);
+            if (isNaN(prev) || isNaN(current)) return;
+            switch (operation) {
+                case '+':
+                    computation = prev + current;
+                    break;
+                case '-':
+                    computation = prev - current;
+                    break;
+                case '*':
+                    computation = prev * current;
+                    break;
+                case '/':
+                    computation = prev / current;
+                    break;
+                default:
+                    return;
+            }
+            currentOperand = computation;
+            operation = undefined;
+            previousOperand = '';
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            document.getElementById('display').innerText = currentOperand;
+        }
+
+        clearDisplay();
+    </script>
+</body>
+</html>
